@@ -169,7 +169,7 @@ function guardarEquipo() {
 
     <option value="">Seleccionar</option>
     <option value="img/HeroesDeFe.png"${logo === "img/HeroesDeFe.png" ? "selected" : ""}>Heroes de Fe</option>
-    <option value="img/Salem.jpg"${logo === "img/Salem.jpg" ? "selected" : ""}>Salem</option>
+    <option value="img/Salem.png"${logo === "img/Salem.png" ? "selected" : ""}>Salem</option>
     <option value="img/Oriel.png"${logo === "img/Oriel.png" ? "selected" : ""}>Oriel</option>
     <option value="img/Fortaleza.png" ${logo === "img/Fortaleza.png" ? "selected" : ""}>Fortaleza</option>
     <option value="img/Jahdiel.png" ${logo === "img/Jahdiel.png" ? "selected" : ""}>Jahdiel</option>
