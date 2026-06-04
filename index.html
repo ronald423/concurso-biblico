@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Concurso Bíblico PRO</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+
+    <link rel="stylesheet" href="css/estiloGral.css">
+</head>
+
+<body>
+
+    <!-- TOP BAR -->
+    <div class="top"
+        style="display: inline-flex; align-items: center; gap: 8px; background-color: #1e293b; padding: 6px 12px; border-radius: 6px;">
+        <div class="codigoT" id="codigo"></div>
+
+        <div class="timer" id="timer"
+            style="font-size: 18px; font-weight: bold; line-height: 1; padding: 0; margin: 0; display: inline-block; color: #f8fafc;">
+            ⏱ 10</div>
+
+        <!-- Botón Antiguo Testamento (Azul Índigo Profundo) -->
+        <button
+            style="padding: 2px 12px; height: 26px; background-color: #2e5b9a; color: #ffffff; border: none; border-radius: 4px; font-size: 13px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; vertical-align: middle; transition: background 0.2s;"
+            onclick="generar('AT')">
+            <svg xmlns="http://w3.org" viewBox="0 0 448 512" style="width: 13px; height: 13px; fill: currentColor;">
+                <path
+                    d="M96 0C43 0 0 43 0 96V416c0 53 43 96 96 96H384c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64H96zM240 128h32v64h64v32H272v96H240V224H176V192h64V128zM96 448c-17.7 0-32-14.3-32-32s14.3-32 32-32H384v64H96z" />
+            </svg>
+            Antiguo
+        </button>
+
+        <!-- Botón Nuevo Testamento (Rojo Carmesí Elegante) -->
+        <button
+            style="padding: 2px 12px; height: 26px; background-color: #a62639; color: #ffffff; border: none; border-radius: 4px; font-size: 13px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; vertical-align: middle; transition: background 0.2s;"
+            onclick="generar('NT')">
+            <svg xmlns="http://w3.org" viewBox="0 0 448 512" style="width: 13px; height: 13px; fill: currentColor;">
+                <path
+                    d="M96 0C43 0 0 43 0 96V416c0 53 43 96 96 96H384c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64H96zM240 128h32v64h64v32H272v96H240V224H176V192h64V128zM96 448c-17.7 0-32-14.3-32-32s14.3-32 32-32H384v64H96z" />
+            </svg>
+            Nuevo
+        </button>
+
+        <input type="number" id="tiempoInput" value="10" min="3" max="60"
+            style="width: 60px; height: 26px; padding: 2px 6px; box-sizing: border-box; background-color: #334155; color: white; border: 1px solid #475569; border-radius: 4px; font-size: 13px;">
+
+        <!-- Botón Pantalla (Gris Claro Neutro) -->
+        <button
+            style="padding: 2px 12px; height: 26px; line-height: 1; background-color: #475569; color: #f8fafc; border: none; border-radius: 4px; font-size: 13px; cursor: pointer;"
+            onclick="pantallaCompleta()">⛶ Pantalla</button>
+
+        <!-- Botón + Equipo (Dorado/Ámbar con texto oscuro para alta legibilidad) -->
+        <button
+            style="padding: 2px 12px; height: 26px; line-height: 1; background-color: #eab308; color: #1e293b; border: none; border-radius: 4px; font-size: 13px; font-weight: bold; cursor: pointer;"
+            onclick="abrirModal()">+ Equipo</button>
+
+        <!-- Botón Ojo/Toggle (Verde Esmeralda) -->
+        <button
+            style="padding: 2px 12px; height: 26px; line-height: 1; background-color: #10b981; color: white; border: none; border-radius: 4px; font-size: 13px; cursor: pointer;"
+            onclick="toggle()">👁</button>
+
+        <!-- Botón Reiniciar (Rojo Alerta Suave) -->
+        <button
+            style="padding: 1px 8px; height: 26px; line-height: 1; background-color: #ef4444; color: white; border: none; border-radius: 4px; font-size: 13px; cursor: pointer;"
+            onclick="reiniciarTodo()">🔄</button>
+
+        <!-- Botón PHO (Celeste Grisáceo) -->
+        <button
+            style="padding: 2px 12px; height: 26px; line-height: 1; background-color: #64748b; color: white; border: none; border-radius: 4px; font-size: 13px; cursor: pointer;"
+            onclick="abrirModalPDF()">📄 PHO</button>
+
+        <!-- Botón PDF (Azul Corporativo Limpio) -->
+        <button
+            style="padding: 2px 12px; height: 26px; line-height: 1; background-color: #0284c7; color: white; border: none; border-radius: 4px; font-size: 13px; font-weight: 500; cursor: pointer;"
+            onclick="abrirModalExportar()">📄 PDF</button>
+
+        <div class="resultado oculto" id="resultado"></div>
+    </div>
+
+
+
+
+
+
+    <!-- EQUIPOS -->
+    <div id="teams"></div>
+
+
+    <div id="modalCodigo" class="modal">
+
+        <div class="modal-codigo">
+
+            <h2 id="tituloCodigo">CÓDIGO</h2>
+
+            <div id="codigoGrande"></div>
+
+            <button onclick="cerrarCodigo()">
+                Cerrar
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- MODAL NUEVO PARTICIPANTE -->
+    <div id="modalEquipo" class="modal">
+
+        <div class="modal-content">
+
+            <h3>➕ Nuevo Participante</h3>
+
+            <input type="text" id="nuevoNombre" placeholder="Nombre del participante">
+
+            <select id="nuevoClub">
+                <option value="">Seleccionar Club</option>
+                <option value="img/HeroesDeFe.png">Heroes de Fe</option>
+                <option value="img/Salem.jpg">Salem</option>
+                <option value="img/Oriel.png">Oriel</option>
+                <option value="img/Fortaleza.png">Fortaleza</option>
+                <option value="img/Jahdiel.png">Jahdiel</option>
+                <option value="img/Origen.png">Origen</option>
+                <option value="img/Atipak.png">Atipak</option>
+            </select>
+
+            <br><br>
+
+            <button onclick="guardarEquipo()">
+                ✅ Guardar
+            </button>
+
+            <button onclick="cerrarModal()">
+                ❌ Cancelar
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div id="modalExportar"
+        style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);justify-content:center;align-items:center;z-index:9999;">
+
+        <div style=" background:white;  padding:20px;  border-radius:10px; width:300px;">
+
+            <h3>📄 Exportar Acta</h3>
+
+            <input id="nombreConcurso" placeholder="Nombre del Concurso" style="width:100%;padding:8px;margin:5px 0;">
+
+            <input id="nombreIglesia" placeholder="Iglesia" style="width:100%;padding:8px;margin:5px 0;">
+
+            <label style="color:white;">📅 Fecha:</label>
+            <input type="date" id="fechaConcurso">
+
+            <br><br>
+
+            <button onclick="cerrarModalExportar()">
+                Cancelar
+            </button>
+
+            <button onclick="confirmarExportacion()">
+                Exportar PDF
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <script src="js/script.js"></script>
+
+
+    <div id="reporte" style="display:none; padding:20px;">
+        <h2>📄 ACTA DE CONCURSO BÍBLICO</h2>
+
+        <h3>📖 Preguntas</h3>
+        <div id="reportePreguntas"></div>
+
+        <h3>👥 Equipos</h3>
+        <div id="reporteEquipos"></div>
+
+        <h3 id="reporteTotal"></h3>
+    </div>
+
+
+
+    <!-- MODAL EXPORTAR PDF -->
+    <div id="modalPDF" class="modal-pdf">
+        <div class="modal-pdf-content">
+
+            <h2>📄 Exportar PDF</h2>
+
+            <label>Nombre del archivo:</label>
+
+            <input type="text" id="nombrePDF" value="Concurso_Biblico" placeholder="Ingrese nombre del archivo">
+
+            <div class="modal-pdf-botones">
+                <button onclick="confirmarExportacionPDF()">
+                    ✅ Exportar
+                </button>
+
+                <button onclick="cerrarModalPDF()" style="background:#e74c3c;">
+                    ❌ Cancelar
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div id="modalResultado" class="modal-resultado">
+    <div class="modal-contenido">
+
+        <h3 id="tituloResultado"></h3>
+
+        <hr>
+        <h1 id="textoResultado"></h1>
+
+        <button onclick="cerrarResultado()" class="btn-cerrar">
+            ❌ Cerrar
+        </button>
+
+    </div>
+</div>
+</body>
+
+</html>
